@@ -116,7 +116,7 @@ router.post("/posts", AuthMiddleware, async (req, res, next) => {
     }
     res.status(201).json(await new postModel(req.body).save());
   } catch (err) {
-    next();
+    next(err);
   }
 });
 
