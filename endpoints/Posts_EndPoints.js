@@ -64,6 +64,7 @@ router.get("/posts/:id", async (req, res, next) => {
 router.post("/posts", AuthMiddleware, async (req, res, next) => {
   try {
     // Verifica presenta Autore
+    console.log("RIGA 67:", req.body)
     if (!req.body.author.name) {
       const error = new Error("Autore mancante!");
       error.status = 400;
