@@ -12,7 +12,7 @@ const AuthMiddleware = (req, res, next) => {
   } else {
     jwt.verify(token, jwtSecretKey, (err, data) => {
       if (err) {
-        err.message = "Invalid token";
+        const err = new Error("Invalid Token");
         err.status = 401;
         return next(err);
       } else {

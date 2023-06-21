@@ -1,9 +1,15 @@
-// Middlewares
-const  errorHandler = (error, req, res, next) => {
-    const e = error.toString();
-    console.error("Errore: " + e);
-    console.log(error);
-    return res.status(400).json("Errore: " + e)
-}
+// Middlewares ERROR
 
-module.exports = {errorHandler};
+const errorHandler = (err, req, res, next) => {
+  console.error(err);
+  // Ottieni il codice di stato o usa 500 se non presente
+  const statusCode = err.status || 500;
+
+  // Imposta messaggio di errore
+  const errorMessage = err.message || "Internal Server Error";
+
+  // Invia risposta al client con il codice di stato e il messaggio di errore
+  res.status(statusCode).json({ error: errorMessage });
+};
+
+module.exports = { errorHandler };

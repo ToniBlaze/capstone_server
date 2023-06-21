@@ -4,13 +4,11 @@ const express = require("express");
 const router = express.Router();
 const multer = require("multer");
 
-
 // Models
 const postModel = require("../models/Posts");
 
 // Middlewares
-const AuthMiddleware = require("../middlewares/AuthMiddleware")
-
+const AuthMiddleware = require("../middlewares/AuthMiddleware");
 
 // INIZIO CLOUDINARY
 cloudinary.config({
@@ -38,20 +36,25 @@ router.post("/upload", upload.single("uploadFile"), (req, res) => {
 
 //----------- FINE CLOUDINARY
 
-
 router.get("/posts", async (req, res, next) => {
   res.status(200).json(await postModel.find());
 });
 
 router.get("/posts/:id", async (req, res, next) => {
   try {
-    res.status(200).json(await postModel.findById(req.params.id));
+    const post = await postModel.findById(req.params.id);
+    if (!post) {
+      const error = new Error("Post not found");
+      error.status = 400;
+      return next(error);
+    }
+    res.status(200).json(post);
   } catch (err) {
-    next();
+    next(err);
   }
 });
 
-router.post("/posts", AuthMiddleware , async (req, res, next) => {
+router.post("/posts", AuthMiddleware, async (req, res, next) => {
   try {
     res.status(201).json(await new postModel(req.body).save());
   } catch (err) {
