@@ -18,7 +18,7 @@ const postsSchema = new mongoose.Schema({
     type: String,
     require: true,
   },
-  titolo: {
+  title: {
     type: String,
     require: true,
   },
