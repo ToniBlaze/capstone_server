@@ -65,20 +65,20 @@ router.post("/posts", AuthMiddleware, async (req, res, next) => {
   try {
     // Verifica presenta Autore
     console.log("RIGA 67:", req.body)
-    if (!req.body.author.name) {
+    if (!req.body.author) {
       const error = new Error("Autore mancante!");
       error.status = 400;
       return next(error);
     }
 
     // Verifica e validazione READTIME.VALUE
-    if (req.body.readTime.value && !/^\d+$/.test(req.body.readTime.value)) {
+    if (req.body.readTime && /^[\d.]+$/.test(req.body.readTime)) {
       const error = new Error(
         "Non possono essere lettere nel tempo di lettura"
       );
       error.status = 400;
       return next(error);
-    } else if (!req.body.readTime.value) {
+    } else if (!req.body.readTime){
       const error = new Error("Tempo di lettura mancante!");
       error.status = 400;
       return next(error);

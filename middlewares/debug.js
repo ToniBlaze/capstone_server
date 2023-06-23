@@ -1,7 +1,8 @@
 // Middlewares ERROR
 
 const errorHandler = (err, req, res, next) => {
-  console.error(err);
+  console.error("ERRORE DEBUG: ",err);
+  console.error("MEX ERR DEBUG: ",err, err.message);
   // Ottieni il codice di stato o usa 500 se non presente
   const statusCode = err.status || 500;
 
