@@ -2,8 +2,8 @@ const express = require("express");
 const routers = express.Router();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const passport = require("passport");
-const validator = require("validator");
+// const passport = require("passport");
+// const validator = require("validator");
 
 const saltRounds = 10;
 const bcriptPassword = process.env.APP_PASSWORD_BCRIPT;

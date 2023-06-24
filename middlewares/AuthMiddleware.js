@@ -6,15 +6,15 @@ const AuthMiddleware = (req, res, next) => {
   let token = req.headers.authorization;
   console.log(token);
   if (!token) {
-    const err = new Error("Unauthorized");
-    err.status = 401;
-    return next(err);
+    const error = new Error("Unauthorized");
+    error.status = 401;
+    return next(error);
   } else {
-    jwt.verify(token, jwtSecretKey, (err, data) => {
-      if (err) {
-        const err = new Error("Invalid Token");
-        err.status = 401;
-        return next(err);
+    jwt.verify(token, jwtSecretKey, (error, data) => {
+      if (error) {
+        const error = new Error("Invalid Token");
+        error.status = 401;
+        return next(error);
       } else {
         next();
         console.log(data);
