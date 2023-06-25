@@ -1,9 +1,11 @@
 const mongoose = require("mongoose");
 
+
 // Comment Schema
 const commentSchema = new mongoose.Schema({
   author: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Users",
     required: true,
   },
   content: {
@@ -31,8 +33,9 @@ const postsSchema = new mongoose.Schema({
     unit: { type: String, require: true },
   },
   author: {
-    name: { type: String, require: true },
-    avatar: { type: String, require: false },
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Users",
+    required: true,
   },
   content: {
     type: String,

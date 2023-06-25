@@ -44,12 +44,19 @@ router.post("/upload", upload.single("uploadFile"), (req, res, next) => {
 //----------- FINE CLOUDINARY
 
 router.get("/posts", async (req, res, next) => {
-  res.status(200).json(await postModel.find());
+  try {
+    const posts = await postModel.find().populate("author", "-password");
+    res.status(200).json(posts);
+  } catch (err) {
+    next(err);
+  }
 });
 
 router.get("/posts/:id", async (req, res, next) => {
   try {
-    const post = await postModel.findById(req.params.id);
+    const post = await postModel
+      .findById(req.params.id)
+      .populate("author", "-password");
     if (!post) {
       const error = new Error("Post not found");
       error.status = 400;
@@ -64,7 +71,7 @@ router.get("/posts/:id", async (req, res, next) => {
 router.post("/posts", AuthMiddleware, async (req, res, next) => {
   try {
     // Verifica presenta Autore
-    console.log("RIGA 67:", req.body)
+    console.log("RIGA 67:", req.body);
     if (!req.body.author) {
       const error = new Error("Autore mancante!");
       error.status = 400;
@@ -78,7 +85,7 @@ router.post("/posts", AuthMiddleware, async (req, res, next) => {
       );
       error.status = 400;
       return next(error);
-    } else if (!req.body.readTime){
+    } else if (!req.body.readTime) {
       const error = new Error("Tempo di lettura mancante!");
       error.status = 400;
       return next(error);
@@ -115,7 +122,11 @@ router.post("/posts", AuthMiddleware, async (req, res, next) => {
       error.status = 400;
       return next(error);
     }
-    res.status(201).json(await new postModel(req.body).save());
+
+    const newPost = new postModel(req.body);
+    // const populatedPost = await newPost.populate({ path: "author", select: '-password' })
+
+    res.status(201).json(await newPost.save());
   } catch (err) {
     next(err);
   }
@@ -143,22 +154,11 @@ router.delete("/posts/:id", async (req, res, next) => {
 // Mostra post relativi all'utente loggato  --> NON FUNZIONA PERCHE???
 router.get("/posts/user/:id", async (req, res, next) => {
   try {
-    const user = await userModel.findById(req.params.id);
-    if (!user) {
-      const error = new Error("User not found");
-      error.status = 400;
-      return next(error);
-    }
+    const posts = await postModel
+      .find({ author: req.params.id })
+      .populate("author", "-password");
 
-    // Se Utente trovato allora trova i post corrispondenti
-    const posts = await postModel.find({ "author.name": user.name });
-    if (!posts) {
-      const error = new Error("You've not created a post yet!");
-      error.status = 400;
-      return next(error);
-    } else {
-      res.status(200).json(posts);
-    }
+    res.status(200).json(posts);
   } catch (err) {
     next(err);
   }
