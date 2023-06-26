@@ -138,7 +138,7 @@ router.put("/posts/:id", async (req, res, next) => {
       .status(200)
       .json(await postModel.findByIdAndUpdate(req.params.id, req.body));
   } catch (err) {
-    next();
+    next(err);
   }
 });
 
@@ -150,8 +150,7 @@ router.delete("/posts/:id", async (req, res, next) => {
   }
 });
 
-// **********************************************
-// Mostra post relativi all'utente loggato  --> NON FUNZIONA PERCHE???
+// Mostra post relativi all'utente loggato
 router.get("/posts/user/:id", async (req, res, next) => {
   try {
     const posts = await postModel
