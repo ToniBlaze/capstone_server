@@ -7,7 +7,9 @@ const postModel = require("../models/Posts");
 // Ritorna tutti i commenti di un relativo Post
 router.get("/posts/:id/comments", async (req, res, next) => {
   try {
-    const post = await postModel.findById(req.params.id);
+    const post = await postModel
+      .findById(req.params.id)
+      .populate("comment.author", "-password");
     const comments = post.comment;
 
     res.status(200).json(comments);
@@ -35,14 +37,8 @@ router.post("/posts/:id", async (req, res, next) => {
   try {
     const post = await postModel.findById(req.params.id);
 
-    // Creare un nuovo oggetto commento con i dati della richiesta
-    const newComment = {
-      author: req.body.author,
-      content: req.body.content,
-    };
-
     // Aggiungere il nuovo commento all'array "comment"
-    post.comment.push(newComment);
+    post.comment.push(req.body);
     const updatedPost = await post.save();
 
     res.status(201).json(updatedPost);

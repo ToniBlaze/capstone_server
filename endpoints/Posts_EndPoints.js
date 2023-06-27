@@ -6,7 +6,6 @@ const multer = require("multer");
 
 // Models
 const postModel = require("../models/Posts");
-const userModel = require("../models/Users");
 
 // Middlewares
 const AuthMiddleware = require("../middlewares/AuthMiddleware");
