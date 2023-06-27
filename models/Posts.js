@@ -28,10 +28,6 @@ const postsSchema = new mongoose.Schema({
     type: String,
     require: true,
   },
-  readTime: {
-    value: { type: Number, require: true },
-    unit: { type: String, require: true },
-  },
   author: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Users",

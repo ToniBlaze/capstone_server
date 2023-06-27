@@ -78,29 +78,6 @@ router.post("/posts", AuthMiddleware, async (req, res, next) => {
       return next(error);
     }
 
-    // Verifica e validazione READTIME.VALUE
-    if (req.body.readTime && /^[\d.]+$/.test(req.body.readTime)) {
-      const error = new Error(
-        "Non possono essere lettere nel tempo di lettura"
-      );
-      error.status = 400;
-      return next(error);
-    } else if (!req.body.readTime) {
-      const error = new Error("Tempo di lettura mancante!");
-      error.status = 400;
-      return next(error);
-    }
-
-    // Verifica e validazione READTIME.UNIT
-    if (req.body.readTime.unit && /\d/.test(req.body.readTime.unit)) {
-      const error = new Error("Non possono essere numeri nel tempo unita'");
-      error.status = 400;
-      return next(error);
-    } else if (!req.body.readTime.unit) {
-      const error = new Error("Unita' mancante!");
-      error.status = 400;
-      return next(error);
-    }
 
     // Verifica presenta Categoria
     if (!req.body.category) {
