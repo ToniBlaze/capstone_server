@@ -78,7 +78,6 @@ router.post("/posts", AuthMiddleware, async (req, res, next) => {
       return next(error);
     }
 
-
     // Verifica presenta Categoria
     if (!req.body.category) {
       const error = new Error("Categoria mancante!");
