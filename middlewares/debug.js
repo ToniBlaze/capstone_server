@@ -10,7 +10,6 @@ const errorHandler = (err, req, res, next) => {
   // Imposta messaggio di errore
   const errorMessage = err.message || "Internal Server Error";
 
-  // Invia risposta al client con il codice di stato e il messaggio di errore
   res.status(statusCode).json({ error: errorMessage });
 };
 

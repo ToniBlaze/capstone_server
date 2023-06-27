@@ -43,7 +43,7 @@ router.post("/upload", upload.single("uploadFile"), (req, res, next) => {
 
 //----------- FINE CLOUDINARY
 
-router.get("/posts", async (req, res, next) => {
+router.get("/posts", AuthMiddleware, async (req, res, next) => {
   try {
     const posts = await postModel.find().populate("author", "-password");
     res.status(200).json(posts);
@@ -124,7 +124,6 @@ router.post("/posts", AuthMiddleware, async (req, res, next) => {
     }
 
     const newPost = new postModel(req.body);
-    // const populatedPost = await newPost.populate({ path: "author", select: '-password' })
 
     res.status(201).json(await newPost.save());
   } catch (err) {
