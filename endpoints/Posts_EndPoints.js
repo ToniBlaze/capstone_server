@@ -84,9 +84,16 @@ router.post("/posts", AuthMiddleware, async (req, res, next) => {
       return next(error);
     }
 
+    // Verifica presenta Categoria
+    if (!req.body.asset) {
+      const error = new Error("Asset mancante!");
+      error.status = 400;
+      return next(error);
+    }
+
     // Verifica presenta Titolo
     if (!req.body.title) {
-      const error = new Error("Titolo mancante!"); 
+      const error = new Error("Titolo mancante!");
       error.status = 400;
       return next(error);
     }
