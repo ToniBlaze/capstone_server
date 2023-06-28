@@ -86,7 +86,7 @@ router.post("/posts", AuthMiddleware, async (req, res, next) => {
 
     // Verifica presenta Titolo
     if (!req.body.title) {
-      const error = new Error("Titolo mancante!");
+      const error = new Error("Titolo mancante!"); 
       error.status = 400;
       return next(error);
     }
