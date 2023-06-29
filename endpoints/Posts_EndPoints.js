@@ -43,8 +43,19 @@ router.post("/upload", upload.single("uploadFile"), (req, res, next) => {
 //----------- FINE CLOUDINARY
 
 router.get("/posts", AuthMiddleware, async (req, res, next) => {
+  // Paginazione
+  const page = parseInt(req.query.page);
+  const limit = 5;
+  const skip = (page - 1) * limit;
+
   try {
-    const posts = await postModel.find().populate("author", "-password");
+    const posts = await postModel
+      .find()
+      .sort({ _id: -1 })
+      .populate("author", "-password")
+      .skip(skip)
+      .limit(limit);
+
     res.status(200).json(posts);
   } catch (err) {
     next(err);
@@ -133,10 +144,18 @@ router.delete("/posts/:id", async (req, res, next) => {
 
 // Mostra post relativi all'utente loggato
 router.get("/posts/user/:id", async (req, res, next) => {
+  // Paginazione
+  const page = parseInt(req.query.page);
+  const limit = 5;
+  const skip = (page - 1) * limit;
+
   try {
     const posts = await postModel
       .find({ author: req.params.id })
-      .populate("author", "-password");
+      .sort({ _id: -1 })
+      .populate("author", "-password")
+      .skip(skip)
+      .limit(limit);
 
     res.status(200).json(posts);
   } catch (err) {
