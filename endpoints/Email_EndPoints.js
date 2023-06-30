@@ -1,29 +1,33 @@
 const express = require("express");
 const router = express.Router();
-require('dotenv').config()
-const sgMail = require('@sendgrid/mail');
+require("dotenv").config();
 
-//SEND GRID per invio EMAIL
-sgMail.setApiKey(process.env.SENDGRID_APIKEY);
+const formData = require("form-data");
+const Mailgun = require("mailgun.js");
+const mailgun = new Mailgun(formData);
+const mg = mailgun.client({
+  username: "api",
+  key: process.env.MAILGUN_API_KEY,
+});
 
-router.post('/mail', async (req, res) => {
+router.post("/mail", (req, res) => {
   const { to } = req.body;
-  const msg = {
-    to: to, // il destinatario dell'email
-    from: 'alessio.toninello@gmail.com', // Il mittente della mail (Email verificata su SendGrid)
-    subject: 'Prima Email tramite SENDGRID!',
-    text: 'Ciao a tutti questa è una mail mandata tramite sendgrid :)',
-  };
 
-  try {
-    const response = await sgMail.send(msg);
-    // console.log(response[0].statusCode);
-    // console.log(response[0].headers);
-    res.status(response[0].statusCode).json({ ...response });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Errore durante l\'invio dell\'email.' });
-  }
+  mg.messages
+    .create(process.env.MAILGUN_DOMAIN, {
+      from: "Limitless TS <limitless-ts@example.com>",
+      to: [to],
+      subject: "Benvenuto in Limitless TS!",
+      text: "Ciao Trader! Grazie per esserti iscritto alla Newsletter, presto riceverai grandi notizie!",
+    })
+    .then((msg) => {
+      console.log(msg); // Log della risposta
+      res.status(200).json({ message: "Email inviata con successo" });
+    })
+    .catch((err) => {
+      console.log(err); // Log dell'errore
+      res.status(500).json({ message: "Errore durante l'invio dell'email" });
+    });
 });
 
 module.exports = router;
