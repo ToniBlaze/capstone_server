@@ -4,10 +4,10 @@ const errorHandler = (err, req, res, next) => {
 
   console.error("ERRORE COMPLETO: ", err);
   console.error("MESSAGGIO ERRORE DEBUG: ", err.message);
-  // Ottieni il codice di stato o usa 500 se non presente
+  // Get status code or use 500 if not present
   const statusCode = err.status || 500;
 
-  // Imposta messaggio di errore
+  // Set error message
   const errorMessage = err.message || "Internal Server Error";
 
   res.status(statusCode).json({ error: errorMessage });

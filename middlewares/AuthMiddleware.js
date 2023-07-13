@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const jwtSecretKey = process.env.APP_JWT_SECRET_KEY;
 
 const AuthMiddleware = (req, res, next) => {
-  // Verifico la presenza di un token negli headers della request
+  // Check for the presence of token in the request headers
   let token = req.headers.authorization;
   console.log(token);
   if (!token) {

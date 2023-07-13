@@ -4,7 +4,7 @@ const router = express.Router();
 // Models
 const postModel = require("../models/Posts");
 
-// Ritorna tutti i commenti di un relativo Post
+// All comments of a post
 router.get("/posts/:id/comments", async (req, res, next) => {
   try {
     const post = await postModel
@@ -18,7 +18,7 @@ router.get("/posts/:id/comments", async (req, res, next) => {
   }
 });
 
-// Ritorna un specifico commento del relativo Post
+// A specific comment in the relevant Post returns
 router.get("/posts/:id/comments/:commentId", async (req, res, next) => {
   try {
     const post = await postModel.findById(req.params.id);
@@ -32,12 +32,12 @@ router.get("/posts/:id/comments/:commentId", async (req, res, next) => {
   }
 });
 
-// Aggiungi commento a specifico Post
+// Add comment to specific Post
 router.post("/posts/:id", async (req, res, next) => {
   try {
     const post = await postModel.findById(req.params.id);
 
-    // Aggiungere il nuovo commento all'array "comment"
+    // Add the new comment to the 'comment' array
     post.comment.push(req.body);
     const updatedPost = await post.save();
 
@@ -54,7 +54,7 @@ router.put("/posts/:id/comments/:commentId", async (req, res, next) => {
       (comment) => comment._id.toString() === req.params.commentId
     );
 
-    // Aggiorna il commento con i nuovi dati ricevuti nella richiesta
+    // Update comment with new data received in the request
     comment.author = req.body.author;
     comment.content = req.body.content;
 

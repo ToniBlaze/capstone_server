@@ -10,7 +10,7 @@ const postModel = require("../models/Posts");
 // Middlewares
 const AuthMiddleware = require("../middlewares/AuthMiddleware");
 
-// INIZIO CLOUDINARY
+// START CLOUDINARY
 cloudinary.config({
   cloud_name: "dtfbehvdq",
   api_key: "157679364286161",
@@ -27,7 +27,7 @@ const storage = new CloudinaryStorage({
 
 const upload = multer({ storage: storage });
 
-// *** CHIMATA POST + CLOUDINARY-MULTER ***
+// *** ENDPOINT POST + CLOUDINARY-MULTER ***
 router.post("/upload", upload.single("uploadFile"), (req, res, next) => {
   if (!req.file) {
     const error = new Error("Nessun file caricato!");
@@ -40,7 +40,7 @@ router.post("/upload", upload.single("uploadFile"), (req, res, next) => {
   }
 });
 
-//----------- FINE CLOUDINARY
+//----------- END CLOUDINARY
 
 router.get("/posts", AuthMiddleware, async (req, res, next) => {
   // Paginazione
@@ -80,7 +80,7 @@ router.get("/posts/:id", async (req, res, next) => {
 
 router.post("/posts", AuthMiddleware, async (req, res, next) => {
   try {
-    // Verifica presenta Autore
+    // Check author
     console.log("RIGA 67:", req.body);
     if (!req.body.author) {
       const error = new Error("Autore mancante!");
@@ -88,28 +88,28 @@ router.post("/posts", AuthMiddleware, async (req, res, next) => {
       return next(error);
     }
 
-    // Verifica presenta Categoria
+    // Check category
     if (!req.body.category) {
       const error = new Error("Categoria mancante!");
       error.status = 400;
       return next(error);
     }
 
-    // Verifica presenta Categoria
+    // Check Asset
     if (!req.body.asset) {
       const error = new Error("Asset mancante!");
       error.status = 400;
       return next(error);
     }
 
-    // Verifica presenta Titolo
+    // Check Title
     if (!req.body.title) {
       const error = new Error("Titolo mancante!");
       error.status = 400;
       return next(error);
     }
 
-    // Verifica presenta Contenuto
+    // Check content
     if (!req.body.content) {
       const error = new Error("Contenuto post mancante!");
       error.status = 400;
@@ -142,7 +142,7 @@ router.delete("/posts/:id", async (req, res, next) => {
   }
 });
 
-// Mostra post relativi all'utente loggato
+// Show posts related to the logged user
 router.get("/posts/user/:id", async (req, res, next) => {
   // Paginazione
   const page = parseInt(req.query.page);

@@ -17,7 +17,7 @@ const postModel = require("./models/Posts");
 
 
 
-// Endpoints Autorizzazione
+// Endpoints Authorization
 const AuthEndpoints = require("./endpoints/Auth");
 app.use(AuthEndpoints);
 

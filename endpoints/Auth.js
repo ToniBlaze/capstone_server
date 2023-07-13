@@ -2,8 +2,7 @@ const express = require("express");
 const routers = express.Router();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-// const passport = require("passport");
-// const validator = require("validator");
+
 
 const saltRounds = 10;
 const bcriptPassword = process.env.APP_PASSWORD_BCRIPT;
@@ -14,9 +13,9 @@ const UserModel = require("../models/Users");
 
 // Auth Endpoints
 routers.post("/register", async (req, res, next) => {
-  // VERIFICA E VALIDAZIONE CAMPI "REGISTER"
+  // Check and validation form "REGISTER"
 
-  // Verifica e validazione NAME
+  // Check and validation field NAME
   if (req.body.name && /\d/.test(req.body.name)) {
     const error = new Error("Non possono essere presenti numeri nel nome");
     error.status = 400;
@@ -27,7 +26,7 @@ routers.post("/register", async (req, res, next) => {
     return next(error);
   }
 
-  // Verifica e validazione LAST NAME
+  // Check and validation field LAST NAME
   if (req.body.lastname && /\d/.test(req.body.lastname)) {
     const error = new Error("Non possono essere presenti numeri nel cognome");
     error.status = 400;
@@ -38,7 +37,7 @@ routers.post("/register", async (req, res, next) => {
     return next(error);
   }
 
-  // Verifica e validazione AGE
+  // Check and validation field AGE
   if (req.body.age && !/^\d+$/.test(req.body.age)) {
     const error = new Error("Non ci possono essere lettere nel campo Eta'");
     error.status = 400;
@@ -49,7 +48,7 @@ routers.post("/register", async (req, res, next) => {
     return next(error);
   }
 
-  // Verifica e validazione CITY
+  // Check and validation field CITY
   if (req.body.city && /\d/.test(req.body.city)) {
     const error = new Error("Non possono essere presenti numeri nella città");
     error.status = 400;
@@ -60,7 +59,7 @@ routers.post("/register", async (req, res, next) => {
     return next(error);
   }
 
-  // Verifica e validazione EMAIL
+  // Check and validation field EMAIL
   if (req.body.email && !/\@/.test(req.body.email)) {
     const error = new Error("Email non valida!");
     error.status = 400;
@@ -71,14 +70,14 @@ routers.post("/register", async (req, res, next) => {
     return next(error);
   }
 
-  // Verifica e validazione PASSWORD
+  // Check and validation field PASSWORD
   if (!req.body.password) {
     const error = new Error("Password mancante!");
     error.status = 400;
     return next(error);
   }
 
-  // --------------- FINE --> VERIFICA E VALIDAZIONE CAMPI "REGISTER"
+  // --------------- END --> Check and validation form "REGISTER"
 
   const password = req.body.password;
   const userExist = await UserModel.findOne({ email: req.body.email });
@@ -91,7 +90,7 @@ routers.post("/register", async (req, res, next) => {
     bcrypt.genSalt(saltRounds, function (err, salt) {
       bcrypt.hash(password, salt, async function (err, hash) {
         // Store hash in your password DB.
-        //console.log(hash)
+
         const user = new UserModel({
           ...req.body,
           password: hash,
@@ -105,7 +104,7 @@ routers.post("/register", async (req, res, next) => {
 });
 
 routers.post("/login", async (req, res, next) => {
-  // Verifica se l'email è presente nel corpo della richiesta e validala
+// Check if the email is present in the body of the request and validate it
   if (req.body.email && !/\@/.test(req.body.email)) {
     const error = new Error("Email non valida!");
     error.status = 400;
@@ -116,28 +115,28 @@ routers.post("/login", async (req, res, next) => {
     return next(error);
   }
 
-  // Verifica se la password è presente nel corpo della richiesta
+  // Check if password is present in the body of the request
   if (!req.body.password) {
     const error = new Error("Password mancante");
     error.status = 400;
     return next(error);
   }
 
-  // Verifica se utente registrato tramite email
+  // Check if user registered by email
   const userLogin = await UserModel.findOne({ email: req.body.email });
   if (!userLogin) {
     const error = new Error("Email sbagliata o utente non registrato");
     error.status = 400;
     return next(error);
   } else {
-    // Controllo la password
+    // Check password
     const log = await bcrypt.compare(req.body.password, userLogin.password);
     if (!log) {
       const error = new Error("Password sbagliata");
       error.status = 400;
       return next(error);
     }
-    // Generare un JWT Token
+    // Create new JWT Token
     const token = jwt.sign(
       {
         id: userLogin._id,
