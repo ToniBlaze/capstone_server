@@ -21,11 +21,9 @@ router.post("/mail", (req, res) => {
       text: "Ciao Trader! Grazie per esserti iscritto alla Newsletter, presto riceverai grandi notizie!",
     })
     .then((msg) => {
-      console.log(msg);
       res.status(200).json({ message: "Email inviata con successo" });
     })
-    .catch((err) => {
-      console.log(err); 
+    .catch((err) => { 
       res.status(500).json({ message: "Errore durante l'invio dell'email" });
     });
 });

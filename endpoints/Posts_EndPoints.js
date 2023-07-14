@@ -35,7 +35,6 @@ router.post("/upload", upload.single("uploadFile"), (req, res, next) => {
     return next(error);
   } else {
     const data = req.file;
-    console.log(data);
     res.status(200).json({ ...data });
   }
 });
@@ -81,7 +80,6 @@ router.get("/posts/:id", async (req, res, next) => {
 router.post("/posts", AuthMiddleware, async (req, res, next) => {
   try {
     // Check author
-    console.log("RIGA 67:", req.body);
     if (!req.body.author) {
       const error = new Error("Autore mancante!");
       error.status = 400;
